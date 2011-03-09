@@ -3,7 +3,7 @@ Version:        1.45b
 Release:        %mkrel 2
 Summary:        Image Processing and Analysis in Java
 
-Group:          Sciences/Biology
+Group:          Sciences/Computer science
 License:        Public Domain
 URL:            http://rsbweb.nih.gov/ij/index.html
 Source0:        http://rsbweb.nih.gov/ij/download/src/ij145b-src.zip
@@ -32,7 +32,7 @@ can be used for quantitative analysis of engineering and scientific image data.
 
 %package javadoc
 Summary:        Javadocs for %{name}
-Group:          Development Documentation
+Group:          Sciences/Computer science
 BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
 
