@@ -1,6 +1,6 @@
 Name:           imagej
 Version:        1.45b
-Release:        %mkrel 1
+Release:        %mkrel 2
 Summary:        Image Processing and Analysis in Java
 
 Group:          Sciences/Biology
@@ -19,7 +19,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 
 BuildRequires:  ant
-
+BuildRequires:	desktop-file-utils
 
 # Requires:       jpackage-utils
 # java-devel not java for plugins build
