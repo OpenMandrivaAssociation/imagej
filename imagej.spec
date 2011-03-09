@@ -3,7 +3,7 @@ Version:        1.45b
 Release:        %mkrel 1
 Summary:        Image Processing and Analysis in Java
 
-Group:          Applications/Engineering
+Group:          Sciences/Biology
 License:        Public Domain
 URL:            http://rsbweb.nih.gov/ij/index.html
 Source0:        http://rsbweb.nih.gov/ij/download/src/ij145b-src.zip
