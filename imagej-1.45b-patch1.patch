@@ -1,0 +1,167 @@
+diff -up ./imagej.sh.patch1 ./imagej.sh
+--- ./imagej.sh.patch1	2010-10-30 19:11:07.917624743 +0200
++++ ./imagej.sh	2010-10-30 19:10:56.181785972 +0200
+@@ -6,50 +6,38 @@
+ # This program is free software, but comes with no warrenty or guarantee
+ # send bug reports or feedback to jjackson at familyjackson dot net
+ # Author: Jon Jackson
+-# Last modified date: $Date: 2009/12/14 20:16:33 $
+-# $Revision: 1.1 $
++# Maintainer : Stéphane Téletchéa for Mandriva
++# 
++# 
+ #
+-# INSTALLATION INSTRUCTIONS
+ #
+ ### WARNING ###########################################################
+ # This file must be edited with a program that supports unix new line characters
+ # - it won't run if edited in 'Notepad' !
+ #######################################################################
+ 
+-# Source location: http://rsb.info.nih.gov/ij/download/linux/unix-script.txt
+-# 1) Save this script in the ImageJ directory as 'imagej'
+-# 2) Modify path variables according to your system 
+-# 3) Give the new file execute permission
+-# 4) Be sure the 'imagej' wrapper is in the 'PATH' 
+-
+ # setup environment
+-set +u # don't give error for unset variables (matters for environment variables)
++set +u 
++# don't give error for unset variables (matters for environment variables)
+ shopt -s extglob # allow extended pattern matching
+ 
+ ############ SITE SPECIFIC VARIABLES #########################
+ # Trailing / is not required for path variables
+ # IMAGEJ PATH - production installation
+-ij_path='/local/ImageJ'
+-# Path to ImageJ development installation
+-ij_path_dev='/home/jjackson/ImageJ'
++ij_path='/usr/share/java'
++#path to data files
++ij_data_path='/usr/share/imagej'
++# Path to user
++ij_user_path="${HOME}/.imagej"
+ # JAVA PATH
+-# assumes executable is ${java_home}/bin/java
+-# set java_home variables ='' to use JAVA_HOME environment variable
+-if [[ -d /usr/java/jdk1.5 ]] ; then
+-	java_home='/usr/java/jdk1.5'
+-else
+-	# Optionally specify java path for all available OS / architecture combinations
+-	java_home_Linux="${ij_path}/jre"
+-	java_home_Linux_x86_64="${ij_path}/jre64"
+-	java_home_SunOS="${ij_path}/jre64"
+-	# 
+-fi
+-ijadmin=''
++JAVA_HOME=$(dirname $(dirname $(readlink /etc/alternatives/java)))
++# report bug to http://qa.mandriva.com/
++ijadmin='Mandriva'
+ # DOCUMENTATION URL
+ doc_url='http://rsb.info.nih.gov/ij/'
+ 
+ # TEMP FOLDER
+-ij_tmp='/tmp/imagej'
++ij_tmp="${HOME}/.imagej/tmp"
+ # LOG FILE
+ #ij_log="${ij_tmp}/log.txt"
+ # default behaviour when an ImageJ window is already open
+@@ -84,26 +72,17 @@ declare -i mem
+ declare -i max_mem
+ declare -i free_mem
+ 
+-java_home="${java_home:-$JAVA_HOME}"
++java_path="${JAVA_HOME}/bin/java"
+ 
+-if [[ "$OS" == 'SunOS' ]] ; then
+-    java_arch='-d64'
+-	JAVA_HOME="${java_home_SunOS:-$java_home}"	
+-	max_mem=`vmstat | awk 'BEGIN{maxMem='$max_64bit'} NR == 3 {fmem=int($5 / 1024); if (fmem < maxMem) {print fmem} else {print maxMem}}'`
+-	free_mem="max_mem"
+-	mem=${free_mem}/2
+-	if (( $mem > $default_mem || $mem < $min_mem )) ; then mem=$default_mem ; fi
+-elif [[ "$OS" == 'Linux' ]] ; then
++if [[ "$OS" == 'Linux' ]] ; then
+ 	if [[ "$processor" == 'x86_64' ]] ; then
+     	java_arch='-d64'
+-        JAVA_HOME="${java_home_Linux_x86_64:-$java_home}"
+     	max_mem=`free | awk -v maxMem=$max_64bit 'NR == 2 {fmem=int($2 / 1024); if (fmem < maxMem) {print fmem} else {print maxMem}}'`
+ 		free_mem=`free | awk -v maxMem=$max_64bit 'NR == 3 {fmem=int($4 / 1024); if (fmem < maxMem) {print fmem} else {print maxMem}}'`
+ 		mem=${free_mem}/3*2
+ 		if (( $mem > $default_mem || $mem < $min_mem )) ; then mem=$default_mem ; fi
+ 	else
+ 		java_arch='-d32'
+-    	JAVA_HOME="${java_home_Linux:-$java_home}"
+     	max_mem=`free | awk -v maxMem=$max_32bit 'NR == 2 {fmem=int($2 / 1024); if (fmem < maxMem) {print fmem} else {print maxMem}}'`
+ 		free_mem=`free | awk -v maxMem=$max_32bit 'NR == 3 {fmem=int($4 / 1024); if (fmem < maxMem) {print fmem} else {print maxMem}}'`
+ 		mem=${free_mem}/3*2
+@@ -112,16 +91,38 @@ elif [[ "$OS" == 'Linux' ]] ; then
+ fi
+ 
+ 
+-# if tools.jar is not in ${ij_path}/jre/lib/ext/ edit the 'tools=' line 
+-# to point to tools.jar. The -compile switch will load tools.jar into the 
+-# classpath and enable plugins to be compiled in imagej
++# create plugins, macros, luts dirs
++mkdir -p $ij_user_path/plugins
++mkdir -p $ij_user_path/macros
++mkdir -p $ij_user_path/luts
+ 
+-if [[ -f "${ij_path}/tools.jar" ]] ; then
+-    tools="${ij_path}/tools.jar"
+-else
+-    tools=''
++if [[ ! -d "$ij_tmp" ]] ; then
++    mkdir -p "$ij_tmp"
+ fi
+ 
++# makes symbolik links from shared plugins, macros and luts 
++
++ls $ij_data_path/plugins | while read p ; do
++  if [ ! -e "$ij_user_path/plugins/$p" ] ; then
++    ln -s $ij_data_path/plugins/$p $ij_user_path/plugins/$p
++  fi
++done
++
++ls $ij_data_path/macros | while read p; do
++  if [ ! -e "$ij_user_path/macros/$p" ] ; then
++      ln -s "$ij_data_path/macros/$p" "$ij_user_path/macros/$p"
++  fi
++done
++
++ls $ij_data_path/luts | while read p ; do
++    if [ ! -e "$ij_user_path/luts/$p" ] ; then
++	ln -s $ij_data_path/luts/$p $ij_user_path/luts/$p
++    fi
++done
++
++# enable plugins to be compiled with imageJ
++tools="${JAVA_HOME}/../lib/tools.jar"
++
+ # End Site specific variables ---------------------------------------------------------
+ 
+ # other variables 
+@@ -320,9 +321,9 @@ fi	
+ 
+ # Resolving ij.jar path.  If ij.jar is a symbolic link to ij_<version>.jar
+ # this allows updating ij.jar without crashing running sessions
+-ij_jar_path=$(derefln ${ij_path}/ij.jar)    
++ij_jar_path=$(derefln ${ij_path}/imagej.jar)    
+                                          
+-for mod_jar in ${ij_path}/lib/*jar  ; do
++for mod_jar in ${ij_path}/*jar  ; do
+     modules="${modules:-}${modules+:}$mod_jar"
+ done
+ modules="-cp ${ij_jar_path}:${modules+:}${modules:-}"
+@@ -470,9 +471,9 @@ if [[ "$portopen" == 'false' ]] ; then
+ fi
+ 
+ if (( $verbosity > 0 )) ; then
+-    echo ${JAVA_HOME}/bin/java ${java_arch} -mx${mem}m ${modules} ij.ImageJ -ijpath ${ij_path} -port${count} ${images} ${macrocmd} ${macroargs}
++    echo ${JAVA_HOME}/bin/java ${java_arch} -mx${mem}m ${modules} ij.ImageJ -ijpath ${ij_user_path} -port${count} ${images} ${macrocmd} ${macroargs}
+ fi
+ 
+ cd "$dir"
+-eval "${JAVA_HOME}/bin/java ${java_arch} -mx${mem}m ${modules} ij.ImageJ -ijpath ${ij_path} -port${count} ${images} ${macrocmd} ${macroargs} "
++eval "${JAVA_HOME}/bin/java ${java_arch} -mx${mem}m ${modules} ij.ImageJ -ijpath ${ij_user_path} -port${count} ${images} ${macrocmd} ${macroargs} "
+ exit 0
