@@ -145,3 +145,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_javadocdir}/%{name}
 
 
+
+
+%changelog
+* Wed Mar 09 2011 Stéphane Téletchéa <steletch@mandriva.org> 1.45b-2mdv2011.0
++ Revision: 643127
+- Fix group tag for ImageJ and ImageJ-docs
+- Add missing BR
+- Fix group tag
+- Update Mandriva specific informations
+- Initial imageJ Mandriva package adaptated from Fedora package
+

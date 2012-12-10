@@ -1,5 +1,3 @@
 sources:
-  "ij145b-src.zip:"	a49bb67c18f2256748bbd53dc700a143d186c89a
-  "imagej.desktop:"	835bcab6700da200d02db39e1cc1aafbd8edca4f
-  "macros.zip:"	23d9e11136cdb1f70e05431be877b6c9c7e41c63
-  "unix-script.txt:"	aedd30cd76947bda460a82eab6039bf0f68c4d12
+  "ij145b-src.zip": a49bb67c18f2256748bbd53dc700a143d186c89a
+  "macros.zip": 23d9e11136cdb1f70e05431be877b6c9c7e41c63
