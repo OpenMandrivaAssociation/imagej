@@ -1,6 +1,6 @@
 Name:           imagej
 Version:        1.45b
-Release:        %mkrel 2
+Release:        3
 Summary:        Image Processing and Analysis in Java
 
 Group:          Sciences/Computer science
