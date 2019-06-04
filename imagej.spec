@@ -1,38 +1,38 @@
 Name:           imagej
-Version:        1.45b
+Version:        1.48e
 Release:        3
 Summary:        Image Processing and Analysis in Java
 
 Group:          Sciences/Computer science
 License:        Public Domain
 URL:            http://rsbweb.nih.gov/ij/index.html
-Source0:        http://rsbweb.nih.gov/ij/download/src/ij145b-src.zip
+Source0:        http://rsbweb.nih.gov/ij/download/src/ij148e-src.zip
 Source1:        %{name}.desktop
 Source2:        http://rsbweb.nih.gov/ij/macros/macros.zip
 Source3:        http://rsb.info.nih.gov/ij/download/linux/unix-script.txt
-# don't copy .class files for Mac OS
-patch0:         %{name}-%{version}-patch0.patch
-# modify imagej.sh for fedora compatibility
-patch1:         %{name}-%{version}-patch1.patch
-BuildArch:      noarch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+Source4:        imagej.png
 
+# don't copy .class files 
+Patch0:         %{name}-%{version}-patch0.patch
+# modify imagej.sh for fedora compatibility
+Patch1:         %{name}-%{version}-patch1.patch
+BuildArch:      noarch
 
 BuildRequires:  ant
-BuildRequires:	desktop-file-utils
+BuildRequires:  desktop-file-utils
+BuildRequires:	java-rpmbuild
 
-# Requires:       jpackage-utils
 # java-devel not java for plugins build
 Requires:       java >= 1.6.0
 
 %description
-ImageJ is a public domain Java image processing program. It can display,        
-edit, analyze a wide variety of image data, including image sequences. Imagej   
+ImageJ is a public domain Java image processing program. It can display,
+edit, analyze a wide variety of image data, including image sequences. Imagej
 can be used for quantitative analysis of engineering and scientific image data.
 
-%package javadoc
+%package        javadoc
 Summary:        Javadocs for %{name}
-Group:          Sciences/Computer science
+Group:          Documentation
 BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
 
@@ -58,101 +58,60 @@ find -name '*.jar' -exec rm -f '{}' \;
 
 %build
 cd source
-ant build javadocs
+%ant build javadocs
 cd ..
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
 # install jar
-mkdir -p $RPM_BUILD_ROOT%{_javadir}
+mkdir -p %{buildroot}%{_javadir}
 cp -p source/ij.jar   \
-$RPM_BUILD_ROOT%{_javadir}/%{name}-%{version}.jar
-ln -s %{name}-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}.jar
-
+%{buildroot}%{_javadir}/%{name}-%{version}.jar
+ln -s %{name}-%{version}.jar %{buildroot}%{_javadir}/%{name}.jar
 
 # install javadoc
-mkdir -p $RPM_BUILD_ROOT%{_javadocdir}/%{name}
+mkdir -p %{buildroot}%{_javadocdir}/%{name}
 cp -rp api  \
-$RPM_BUILD_ROOT%{_javadocdir}/%{name}
+%{buildroot}%{_javadocdir}/%{name}
 
 # install icon
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/pixmaps
-cp -p source/build/microscope.gif $RPM_BUILD_ROOT%{_datadir}/pixmaps
+mkdir -p %{buildroot}%{_datadir}/pixmaps
+cp -p %{SOURCE4} %{buildroot}%{_datadir}/pixmaps
 
 # install data files
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}
-cp -p source/build/about.jpg $RPM_BUILD_ROOT%{_datadir}/%{name}/about.jpg
-cp -p source/build/IJ_Props.txt $RPM_BUILD_ROOT%{_datadir}/%{name}/IJ_Props.txt
+mkdir -p %{buildroot}%{_datadir}/%{name}
+cp -p source/build/about.jpg %{buildroot}%{_datadir}/%{name}/about.jpg
+cp -p source/build/IJ_Props.txt %{buildroot}%{_datadir}/%{name}/IJ_Props.txt
 
 #install macros
 chmod 644 macros/About\ Startup\ Macros 
 find ./macros -name \*.txt -type f -exec chmod 644 {} \;
 find ./macros -type d -exec chmod 755 {} \;
-cp -rp macros $RPM_BUILD_ROOT%{_datadir}/%{name}
-
+cp -rp macros %{buildroot}%{_datadir}/%{name}
 
 #install luts
-mkdir $RPM_BUILD_ROOT%{_datadir}/%{name}/luts 
+mkdir %{buildroot}%{_datadir}/%{name}/luts 
 
 # install script
-mkdir -p $RPM_BUILD_ROOT%{_bindir}
+mkdir -p %{buildroot}%{_bindir}
 chmod +x imagej.sh
-cp -p imagej.sh $RPM_BUILD_ROOT%{_bindir}/%{name}
+cp -p imagej.sh %{buildroot}%{_bindir}/%{name}
 
 # directory for plugins
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}/plugins
-cp source/plugins/JavaScriptEvaluator.source $RPM_BUILD_ROOT%{_datadir}/%{name}/plugins/JavaScriptEvaluator.java
+mkdir -p %{buildroot}%{_datadir}/%{name}/plugins
+cp source/plugins/JavaScriptEvaluator.source %{buildroot}%{_datadir}/%{name}/plugins/JavaScriptEvaluator.java
 
 # desktop file
 desktop-file-install --vendor=""                     \
        --dir=%{buildroot}%{_datadir}/applications/   \
        %{SOURCE1}
 
-%post
-
-#update icon cache
-#touch --no-create %{_datadir}/icons/hicolor
-#if [ -x %{_bindir}/gtk-update-icon-cache ]; then
-#  %{_bindir}/gtk-update-icon-cache -q %{_datadir}/icons/hicolor;
-#fi
-#update-desktop-database &> /dev/null || :
-
-%postun
-# update icon cache
-#touch --no-create %{_datadir}/icons/hicolor
-#if [ -x %{_bindir}/gtk-update-icon-cache ]; then
-#  %{_bindir}/gtk-update-icon-cache -q %{_datadir}/icons/hicolor;
-#fi
-#update-desktop-database &> /dev/null || :
-
-
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
-%defattr(-,root,root,-)
 %{_javadir}/*
 %{_datadir}/%{name}/
 %{_datadir}/applications/%{name}.desktop
-%{_datadir}/pixmaps/microscope.gif
+%{_datadir}/pixmaps/%{name}.png
 %{_bindir}/%{name}
 %doc source/aREADME.txt source/release-notes.html source/applet.html
 
 %files javadoc
-%defattr(-,root,root,-)
 %{_javadocdir}/%{name}
-
-
-
-
-%changelog
-* Wed Mar 09 2011 Stéphane Téletchéa <steletch@mandriva.org> 1.45b-2mdv2011.0
-+ Revision: 643127
-- Fix group tag for ImageJ and ImageJ-docs
-- Add missing BR
-- Fix group tag
-- Update Mandriva specific informations
-- Initial imageJ Mandriva package adaptated from Fedora package
-

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=ImageJ
 GenericName=Image Editor                                       
 GenericName[ar]=محرر صور                                       
@@ -63,8 +62,8 @@ GenericName[zh_HK]=圖片編輯器
 GenericName[zh_TW]=圖片編輯器    
 Comment=Image Processing and Analysis in Java
 Exec=imagej %f
-TryExec=imagej 
-Icon=/usr/share/pixmaps/microscope.gif
+TryExec=imagej
+Icon=imagej
 Terminal=false
 Type=Application
 Categories=Application;Graphics;
