@@ -61,6 +61,9 @@ cd source
 %ant build javadocs
 cd ..
 
+exportCC=gcc
+exportCXX=g++
+
 %install
 # install jar
 mkdir -p %{buildroot}%{_javadir}
