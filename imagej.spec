@@ -23,7 +23,7 @@ BuildRequires:  desktop-file-utils
 BuildRequires:	java-rpmbuild
 
 # java-devel not java for plugins build
-Requires:       java >= 1.8.0
+Requires:       java >= 13
 
 %description
 ImageJ is a public domain Java image processing program. It can display,
