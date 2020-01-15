@@ -1,12 +1,12 @@
 Name:           imagej
-Version:        1.48e
-Release:        3
+Version:        1.52r
+Release:        1
 Summary:        Image Processing and Analysis in Java
 
 Group:          Sciences/Computer science
 License:        Public Domain
 URL:            http://rsbweb.nih.gov/ij/index.html
-Source0:        http://rsbweb.nih.gov/ij/download/src/ij148e-src.zip
+Source0:        http://rsbweb.nih.gov/ij/download/src/ij152r-src.zip
 Source1:        %{name}.desktop
 Source2:        http://rsbweb.nih.gov/ij/macros/macros.zip
 Source3:        http://rsb.info.nih.gov/ij/download/linux/unix-script.txt
