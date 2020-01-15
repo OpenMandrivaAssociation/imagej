@@ -13,7 +13,7 @@ Source3:        http://rsb.info.nih.gov/ij/download/linux/unix-script.txt
 Source4:        imagej.png
 
 # don't copy .class files 
-Patch0:         %{name}-%{version}-patch0.patch
+# Patch0:         %{name}-%{version}-patch0.patch
 # modify imagej.sh for fedora compatibility
 Patch1:         %{name}-%{version}-patch1.patch
 BuildArch:      noarch
