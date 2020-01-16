@@ -1,12 +1,12 @@
 Name:           imagej
-Version:        1.52r
-Release:        1
+Version:        1.48e
+Release:        3
 Summary:        Image Processing and Analysis in Java
 
 Group:          Sciences/Computer science
 License:        Public Domain
 URL:            http://rsbweb.nih.gov/ij/index.html
-Source0:        http://rsbweb.nih.gov/ij/download/src/ij152r-src.zip
+Source0:        http://rsbweb.nih.gov/ij/download/src/ij148e-src.zip
 Source1:        %{name}.desktop
 Source2:        http://rsbweb.nih.gov/ij/macros/macros.zip
 Source3:        http://rsb.info.nih.gov/ij/download/linux/unix-script.txt
@@ -23,7 +23,7 @@ BuildRequires:  desktop-file-utils
 BuildRequires:	java-rpmbuild
 
 # java-devel not java for plugins build
-Requires:       java >= 1.8.0
+Requires:       java >= 1.6.0
 
 %description
 ImageJ is a public domain Java image processing program. It can display,
@@ -52,64 +52,6 @@ rm -rf __MACOSX
 #get and patch unix-script.txt
 cp %{SOURCE3} ./imagej.sh
 %patch1 -p1 -b .patch1
-
-find -name '*.class' -exec rm -f '{}' \;
-find -name '*.jar' -exec rm -f '{}' \;
-
-%build
-cd source
-%ant build javadocs
-Summary:        Image Processing and Analysis in Java
-
-Group:          Sciences/Computer science
-License:        Public Domain
-URL:            http://rsbweb.nih.gov/ij/index.html
-Source0:        http://rsbweb.nih.gov/ij/download/src/ij152r-src.zip
-Source1:        %{name}.desktop
-Source2:        http://rsbweb.nih.gov/ij/macros/macros.zip
-Source3:        http://rsb.info.nih.gov/ij/download/linux/unix-script.txt
-Source4:        imagej.png
-
-# don't copy .class files 
-# Patch0:         %{name}-%{version}-patch0.patch
-# modify imagej.sh for fedora compatibility
-# Patch1:         %{name}-%{version}-patch1.patch
-BuildArch:      noarch
-
-BuildRequires:  ant
-BuildRequires:  desktop-file-utils
-BuildRequires:	java-rpmbuild
-
-# java-devel not java for plugins build
-Requires:       java >= 1.8.0
-
-%description
-ImageJ is a public domain Java image processing program. It can display,
-edit, analyze a wide variety of image data, including image sequences. Imagej
-can be used for quantitative analysis of engineering and scientific image data.
-
-%package        javadoc
-Summary:        Javadocs for %{name}
-Group:          Documentation
-BuildArch:      noarch
-Requires:       %{name} = %{version}-%{release}
-
-%description javadoc
-This package contains the API documentation for %{name}.
-
-%prep
-%setup -q -c -n "%{name}-%{version}" 
-# patch build.xml
-# %patch0 -p0 -b .patch0
-# unzip macros.zip
-unzip -qq -u %{SOURCE2} 
-# erase binary and useless files 
-rm -rf macros/.FBC*
-rm macros/build.xml
-rm -rf __MACOSX
-#get and patch unix-script.txt
-cp %{SOURCE3} ./imagej.sh
-# %patch1 -p1 -b .patch1
 
 find -name '*.class' -exec rm -f '{}' \;
 find -name '*.jar' -exec rm -f '{}' \;
