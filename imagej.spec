@@ -51,6 +51,8 @@ find -name '*.class' -exec rm -f '{}' \;
 find -name '*.jar' -exec rm -f '{}' \;
 
 %build
+exportCC=gcc
+exportCXX=g++
 cd source
 %ant build javadocs
 cd ..
