@@ -23,6 +23,7 @@ BuildRequires:  ant
 BuildRequires:  desktop-file-utils
 BuildRequires:	java-rpmbuild
 BuildRequires:	dos2unix
+BuildRequires:	java-11-openjdk-devel
 
 # java-devel not java for plugins build
 Requires:       java-1.8.0-openjdk 
