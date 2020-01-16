@@ -1,6 +1,6 @@
 Name:           imagej
 Version:        1.52r
-Release:        1Name:           imagej
+Release:        Name:           imagej
 Version:        1.52r
 Release:        1
 Summary:        Image Processing and Analysis in Java
