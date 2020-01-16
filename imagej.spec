@@ -22,6 +22,7 @@ BuildArch:      noarch
 BuildRequires:  ant
 BuildRequires:  desktop-file-utils
 BuildRequires:	java-rpmbuild
+BuildRequire:	dos2unix
 
 # java-devel not java for plugins build
 Requires:       java-1.8.0-openjdk 
