@@ -1,14 +1,13 @@
---- source/build.xml	2010-06-15 12:13:20.000000000 +0400
-+++ source/build.xml.new	2015-11-10 14:48:14.365236293 +0300
-@@ -19,9 +19,9 @@
+diff --git a/source/build.xml b/source/build.xml
+index 99db9ee..70e4fd3 100644
+--- a/source/build.xml
++++ b/source/build.xml
+@@ -16,7 +16,7 @@
      <copy file="IJ_Props.txt" todir="build" />
      <copy file="images/microscope.gif" tofile="build/microscope.gif" />
      <copy file="images/about.jpg" tofile="build/about.jpg" />
 -	<copy file="plugins/MacAdapter.class" tofile="build/MacAdapter.class" /> 
-+	<!-- <copy file="plugins/MacAdapter.class" tofile="build/MacAdapter.class" /> 
- 	<copy file="plugins/JavaScriptEvaluator.class" tofile="build/JavaScriptEvaluator.class" /> 
--	<copy file="plugins/MacClipboard.class" tofile="build/MacClipboard.class" /> 
-+	<copy file="plugins/MacClipboard.class" tofile="build/MacClipboard.class" /> -->
++	<!-- <copy file="plugins/MacAdapter.class" tofile="build/MacAdapter.class" /> -->
      <copy todir="build/macros"><fileset dir="macros"/></copy>
      <!-- Build ij.jar. -->
      <jar jarfile="ij.jar" basedir="build"

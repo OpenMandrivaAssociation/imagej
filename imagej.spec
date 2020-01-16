@@ -1,6 +1,6 @@
 Name:           imagej
 Version:        1.52r
-Release:        1
+Release:        2
 Summary:        Image Processing and Analysis in Java
 
 Group:          Sciences/Computer science
@@ -16,6 +16,7 @@ Source4:        imagej.png
 Patch0:         %{name}-%{version}-patch0.patch
 # modify imagej.sh for fedora compatibility
 Patch1:         %{name}-%{version}-patch1.patch
+Patch2:		fix-build-level.patch
 BuildArch:      noarch
 
 BuildRequires:  ant
@@ -23,7 +24,7 @@ BuildRequires:  desktop-file-utils
 BuildRequires:	java-rpmbuild
 
 # java-devel not java for plugins build
-Requires:       java = 1.8.0
+Requires:       java-1.8.0-openjdk 
 
 %description
 ImageJ is a public domain Java image processing program. It can display,
@@ -42,7 +43,8 @@ This package contains the API documentation for %{name}.
 %prep
 %setup -q -c -n "%{name}-%{version}" 
 # patch build.xml
-%patch0 -p0 -b .patch0
+dos2unix source/build.xml
+%patch0 -p1 -b  .patch0
 # unzip macros.zip
 unzip -qq -u %{SOURCE2} 
 # erase binary and useless files 
@@ -52,6 +54,7 @@ rm -rf __MACOSX
 #get and patch unix-script.txt
 cp %{SOURCE3} ./imagej.sh
 %patch1 -p1 -b .patch1
+%patch2 -p1
 
 find -name '*.class' -exec rm -f '{}' \;
 find -name '*.jar' -exec rm -f '{}' \;
@@ -98,7 +101,7 @@ cp -p imagej.sh %{buildroot}%{_bindir}/%{name}
 
 # directory for plugins
 mkdir -p %{buildroot}%{_datadir}/%{name}/plugins
-cp source/plugins/JavaScriptEvaluator.source %{buildroot}%{_datadir}/%{name}/plugins/JavaScriptEvaluator.java
+#cp source/plugins/JavaScriptEvaluator.source %{buildroot}%{_datadir}/%{name}/plugins/JavaScriptEvaluator.java
 
 # desktop file
 desktop-file-install --vendor=""                     \
@@ -111,7 +114,7 @@ desktop-file-install --vendor=""                     \
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
 %{_bindir}/%{name}
-%doc source/aREADME.txt source/release-notes.html source/applet.html
+%doc source/aREADME.txt source/release-notes.html
 
 %files javadoc
 %{_javadocdir}/%{name}
