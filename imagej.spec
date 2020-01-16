@@ -13,9 +13,9 @@ Source3:        http://rsb.info.nih.gov/ij/download/linux/unix-script.txt
 Source4:        imagej.png
 
 # don't copy .class files 
-Patch0:         %{name}-%{version}-patch0.patch
+# Patch0:         %{name}-%{version}-patch0.patch
 # modify imagej.sh for fedora compatibility
-Patch1:         %{name}-%{version}-patch1.patch
+# Patch1:         %{name}-%{version}-patch1.patch
 BuildArch:      noarch
 
 BuildRequires:  ant
@@ -42,7 +42,7 @@ This package contains the API documentation for %{name}.
 %prep
 %setup -q -c -n "%{name}-%{version}" 
 # patch build.xml
-%patch0 -p0 -b .patch0
+# %patch0 -p0 -b .patch0
 # unzip macros.zip
 unzip -qq -u %{SOURCE2} 
 # erase binary and useless files 
@@ -51,7 +51,7 @@ rm macros/build.xml
 rm -rf __MACOSX
 #get and patch unix-script.txt
 cp %{SOURCE3} ./imagej.sh
-%patch1 -p1 -b .patch1
+# %patch1 -p1 -b .patch1
 
 find -name '*.class' -exec rm -f '{}' \;
 find -name '*.jar' -exec rm -f '{}' \;
