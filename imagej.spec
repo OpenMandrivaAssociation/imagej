@@ -5,7 +5,7 @@ Summary:        Image Processing and Analysis in Java
 
 Group:          Sciences/Computer science
 License:        Public Domain
-URL:            http://rsbweb.nih.gov/ij/index.html
+URL:            https://rsbweb.nih.gov/ij/index.html
 Source0:        http://rsbweb.nih.gov/ij/download/src/ij152r-src.zip
 Source1:        %{name}.desktop
 Source2:        http://rsbweb.nih.gov/ij/macros/macros.zip
